@@ -109,7 +109,7 @@ def printBoard(board):
 
 def main():
 
-    n = 12  # board size
+    n = 13  # board size
     board = []
 
     for i in range(n):
@@ -128,6 +128,7 @@ def main():
     solveBoard(board, row, rowmask, ldmask, rdmask)
     result.sort()
     print(result)
+    print(len(result))
 
 
 if __name__ == "__main__":
@@ -138,4 +139,4 @@ if __name__ == "__main__":
     
     end = time.time()
     
-    print(f"\nExécuté en : {round(end - start, 6)} secondes.")
+    print(f"\nWas executed in : {round(end - start, 6)} seconds.")

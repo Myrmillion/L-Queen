@@ -3,11 +3,8 @@
 # ---------------------
 
 from mpi4py import MPI
-
-
-import time
-import math
 import numpy
+import time
 
 # ---------------------
 # GLOBAL VARIABLES
@@ -55,7 +52,7 @@ def isSafe(board, row, col):
     return True
 
 
-def solveNQUtil(result, board, col = 0, my_indices = ""):
+def solveNQUtil(board, col):
     '''
     A recursive utility function to solve N Queen problem.
     '''
@@ -77,14 +74,7 @@ def solveNQUtil(result, board, col = 0, my_indices = ""):
 
     res = False
 
-    rows = []
-
-    if col == 0:
-        rows = my_indices
-    else:
-        rows = range(n)
-
-    for i in rows:
+    for i in range(n):
 
         # Check if queen can be placed on board[i][col]
         if (isSafe(board, i, col)):
@@ -93,7 +83,7 @@ def solveNQUtil(result, board, col = 0, my_indices = ""):
             board[i][col] = 1
 
             # Make result true if any placement is possible
-            res = solveNQUtil(result, board, col + 1) or res
+            res = solveNQUtil(board, col + 1) or res
 
             # If placing queen in board[i][col] doesn't lead to a solution, then remove queen from board[i][col]
             board[i][col] = 0  # BACKTRACK
@@ -106,7 +96,7 @@ def solveNQUtil(result, board, col = 0, my_indices = ""):
 # ---------------------
 
 
-def solveNQ(board, my_indices):
+def solveNQ(n):
     '''
     This function solves the N Queen problem using Backtracking.
     It mainly uses solveNQUtil() to solve the problem.
@@ -114,9 +104,14 @@ def solveNQ(board, my_indices):
     Please note that there may be more than one solutions, this function prints one of the feasible solutions.
     '''
 
-    result = []
+    result.clear()
 
-    solveNQUtil(result, board, 0, my_indices)
+    board = [[0 for j in range(n)]
+             for i in range(n)]
+
+    solveNQUtil(board, 0)
+
+    result.sort()
 
     return result
 
@@ -125,54 +120,20 @@ def solveNQ(board, my_indices):
 # MAIN
 # ---------------------
 
-def main(N_SIZE):
+def main():
 
-    board = [[0 for j in range(N_SIZE)] for i in range(N_SIZE)]
-
-    comm = MPI.COMM_WORLD
-    my_rank = comm.Get_rank()
-    nb_cores = comm.Get_size()
-
-    # ----------- | START TIMER | ----------- #
-
-    start = time.time()
-
-    parts_indices = []
-
-    # >>> TO BE CORRECTED CAUSE IT CRASHES DEPENDING ON NB OF CORES SOMETIMES (SOME VERY SPECIFIC CASES THAT I'M NOT HANDLING CORRECTLY) <<<
-    if my_rank == 0:
-        
-        n = math.ceil(N_SIZE / nb_cores)
-        parts_indices.extend([[j for j in range(i - n, i)] for i in range(n, N_SIZE + 1, n)])
-
-        if (n * nb_cores) != N_SIZE: 
-            parts_indices.append([i for i in range((nb_cores - 1) * n, N_SIZE)])
-    # -------------------------------------------------------------------------------------------------------------------------------------
-
-    my_indices = comm.scatter(parts_indices, 0)
-    
-    result = solveNQ(board, my_indices)
-
-    patterns = comm.gather(result, 0)
-
-    end = time.time()
-
-    # ----------- | END TIMER | ----------- #
-
-    cores_times = comm.gather(end - start, 0)
-
-    if my_rank == 0:
-        
-        final_result = []
-        [final_result.extend(tab) for tab in patterns]
-        
-        #print(f"\n{final_result}")
-        print(f"len = {len(final_result)}")
-        print(f"\nWas executed in : {round(max(cores_times), 6)} seconds.")
+    n = 13
+    res = solveNQ(n)
+    # print(res)
+    print(f"len = {len(res)}")
 
 
 if __name__ == "__main__":
-
-    N_SIZE = 13
-
-    main(N_SIZE)
+    
+    start = time.time()
+        
+    main()
+    
+    end = time.time()
+    
+    print(f"\nExécuté en : {round(end - start, 6)} secondes.")
