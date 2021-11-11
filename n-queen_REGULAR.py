@@ -4,6 +4,7 @@
 
 from mpi4py import MPI
 import numpy
+import time
 
 # ---------------------
 # GLOBAL VARIABLES
@@ -121,11 +122,17 @@ def solveNQ(n):
 
 def main():
 
-    n = 5
+    n = 12
     res = solveNQ(n)
     print(res)
 
 
 if __name__ == "__main__":
     
+    start = time.time()
+        
     main()
+    
+    end = time.time()
+    
+    print(f"\nExécuté en : {round(end - start, 6)} secondes.")

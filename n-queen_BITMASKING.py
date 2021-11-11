@@ -5,6 +5,7 @@
 from mpi4py import MPI
 import numpy
 import math
+import time
 
 # ---------------------
 # GLOBAL VARIABLES
@@ -108,7 +109,7 @@ def printBoard(board):
 
 def main():
 
-    n = 5  # board size
+    n = 12  # board size
     board = []
 
     for i in range(n):
@@ -131,4 +132,10 @@ def main():
 
 if __name__ == "__main__":
     
+    start = time.time()
+    
     main()
+    
+    end = time.time()
+    
+    print(f"\nExécuté en : {round(end - start, 6)} secondes.")
