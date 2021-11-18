@@ -202,7 +202,7 @@ def main(N_SIZE):
             
             [final_result.append(tab) for tab in solveNQ(board, [int((N_SIZE / 2) + 0.5) - 1])]
         
-        print(f"\n{final_result}")
+        #print(f"\n{final_result}")
         print(f"len = {len(final_result)}")
         print(f"\nWas executed in : {round(max(cores_times), 6)} seconds.")
 
