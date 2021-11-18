@@ -121,7 +121,10 @@ def division_as_equal_groups(n, m):
     return (size_1, nb_groups_size_1, size_2, nb_groups_size_2)
     
 
-def symmetriseArrayInArray(arrays):
+def symmetriseArraysInArray(arrays):
+    '''
+    Invert arrays in array such as : [[1, 2, 3], [4, 5, 6]] -> [[3, 2, 1], [6, 5, 4]].
+    '''
     
     return [[i for i in reversed(array)] for array in arrays]
 
@@ -167,8 +170,6 @@ def main(N_SIZE):
         
         half_N_SIZE = int(N_SIZE / 2) # doing the other half is pointless cause of symmetry.
         
-        print(half_N_SIZE)
-        
         nb_tiles_1, nb_cores_1, nb_tiles_2, nb_cores_2 = division_as_equal_groups(half_N_SIZE, nb_cores)  
         current_indice = 0
         
@@ -181,8 +182,15 @@ def main(N_SIZE):
             current_indice += nb_tiles_2
     
     my_indices = comm.scatter(cores_indices, 0) # core 0 is the one scattering to others.
+    
+    if (my_rank == 0) and (N_SIZE % 2 != 0): # if impair then the median number needs to be counted as well.
+        
+        my_indices.append(int((N_SIZE / 2) + 0.5) - 1)
+                
     result = solveNQ(board, my_indices)
     patterns = comm.gather(result, 0) # core 0 is the one gathering from others.
+    
+    
 
     end = time.time()
 
@@ -195,7 +203,7 @@ def main(N_SIZE):
         final_result = []
         
         [final_result.extend(tab) for tab in patterns]
-        [final_result.append(symmetriseArrayInArray(final_result))]
+        [final_result.append(symmetriseArraysInArray(final_result))]
         
         
         #print(f"\n{final_result}")
@@ -205,6 +213,6 @@ def main(N_SIZE):
 
 if __name__ == "__main__":
 
-    N_SIZE = 14
+    N_SIZE = 9
 
     main(N_SIZE)
