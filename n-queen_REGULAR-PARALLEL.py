@@ -182,15 +182,8 @@ def main(N_SIZE):
             current_indice += nb_tiles_2
     
     my_indices = comm.scatter(cores_indices, 0) # core 0 is the one scattering to others.
-    
-    if (my_rank == 0) and (N_SIZE % 2 != 0): # if impair then the median number needs to be counted as well.
-        
-        my_indices.append(int((N_SIZE / 2) + 0.5) - 1)
-                
     result = solveNQ(board, my_indices)
     patterns = comm.gather(result, 0) # core 0 is the one gathering from others.
-    
-    
 
     end = time.time()
 
@@ -203,16 +196,19 @@ def main(N_SIZE):
         final_result = []
         
         [final_result.extend(tab) for tab in patterns]
-        [final_result.append(symmetriseArraysInArray(final_result))]
+        [final_result.extend(symmetriseArraysInArray(final_result))]
         
+        if(N_SIZE % 2 != 0):
+            
+            [final_result.append(tab) for tab in solveNQ(board, [int((N_SIZE / 2) + 0.5) - 1])]
         
-        #print(f"\n{final_result}")
+        print(f"\n{final_result}")
         print(f"len = {len(final_result)}")
         print(f"\nWas executed in : {round(max(cores_times), 6)} seconds.")
 
 
 if __name__ == "__main__":
 
-    N_SIZE = 9
+    N_SIZE = 11
 
     main(N_SIZE)

@@ -109,7 +109,7 @@ def printBoard(board):
 
 def main():
 
-    n = 17  # board size
+    n = 11 # board size
     board = []
 
     for i in range(n):
@@ -128,7 +128,7 @@ def main():
     solveBoard(board, row, rowmask, ldmask, rdmask)
     result.sort()
     print(result)
-    print(len(result))
+    print("len = ", len(result))
 
 
 if __name__ == "__main__":
