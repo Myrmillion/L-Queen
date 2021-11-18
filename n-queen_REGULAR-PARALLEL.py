@@ -121,6 +121,10 @@ def division_as_equal_groups(n, m):
     return (size_1, nb_groups_size_1, size_2, nb_groups_size_2)
     
 
+def symmetriseArrayInArray(arrays):
+    
+    return [[i for i in reversed(array)] for array in arrays]
+
 # ---------------------
 # SOLVE FUNCTION
 # ---------------------
@@ -161,7 +165,11 @@ def main(N_SIZE):
     
     if my_rank == 0:
         
-        nb_tiles_1, nb_cores_1, nb_tiles_2, nb_cores_2 = division_as_equal_groups(N_SIZE, nb_cores)  
+        half_N_SIZE = int(N_SIZE / 2) # doing the other half is pointless cause of symmetry.
+        
+        print(half_N_SIZE)
+        
+        nb_tiles_1, nb_cores_1, nb_tiles_2, nb_cores_2 = division_as_equal_groups(half_N_SIZE, nb_cores)  
         current_indice = 0
         
         for _ in range(nb_cores_1):        
@@ -185,7 +193,10 @@ def main(N_SIZE):
     if my_rank == 0:
         
         final_result = []
+        
         [final_result.extend(tab) for tab in patterns]
+        [final_result.append(symmetriseArrayInArray(final_result))]
+        
         
         #print(f"\n{final_result}")
         print(f"len = {len(final_result)}")
@@ -194,6 +205,6 @@ def main(N_SIZE):
 
 if __name__ == "__main__":
 
-    N_SIZE = 16
+    N_SIZE = 14
 
     main(N_SIZE)

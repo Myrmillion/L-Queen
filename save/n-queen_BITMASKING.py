@@ -109,7 +109,7 @@ def printBoard(board):
 
 def main():
 
-    n = 13  # board size
+    n = 17  # board size
     board = []
 
     for i in range(n):
