@@ -1,5 +1,5 @@
-Run the script with MPIEXEC
+Run the script with MPIRUN
 
 ```
-mpiexec -n 4 python main.py
+mpirun --use-hwthread-cpus -np 20 python3 ./n-queen_REGULAR-PARALLEL.py
 ```
