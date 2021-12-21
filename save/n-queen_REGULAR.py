@@ -111,7 +111,7 @@ def solveNQ(n):
 
     solveNQUtil(board, 0)
 
-    result.sort()
+    #result.sort()
 
     return result
 
@@ -122,9 +122,9 @@ def solveNQ(n):
 
 def main():
 
-    n = 14
+    n = 6
     res = solveNQ(n)
-    # print(res)
+    print(res)
     print(f"len = {len(res)}")
 
 

@@ -209,6 +209,6 @@ def main(N_SIZE):
 
 if __name__ == "__main__":
 
-    N_SIZE = 11
+    N_SIZE = 10
 
     main(N_SIZE)
