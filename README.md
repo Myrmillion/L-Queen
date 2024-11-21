@@ -1,3 +1,5 @@
+<div align="justify">
+
 # Context
 
 This project has been realized as part of ParaDis, a class dedicated to Parallel and Distributed computing from the MSE (Master of Science in Ingenieering) from the HES-SO.
@@ -17,3 +19,5 @@ Use the following command :
 ```
 mpirun --use-hwthread-cpus -np 20 python3 ./n-queen_REGULAR-PARALLEL.py
 ```
+
+</div>
